@@ -1,9 +1,6 @@
 import time
 
 N = 4
-ld = [0] * 30
-rd = [0] * 30
-cl = [0] * 30
 
 def printSolution(board):
     for i in range(N):
@@ -11,31 +8,46 @@ def printSolution(board):
             print(board[i][j], end = " ")
         print()
 
-def solveNQUtil(board, col):
-    if (col >= N):
+def IsSafe(board,row,col):
+    for i in range(col):
+        if board[row][i]==1:
+            return False
+    for i,j in zip(range(row,-1,-1),
+                   range(col,-1,-1)):
+        if board[i][j]==1:
+            return False
+    for i, j in zip(range(row, N, 1),
+                    range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    return True
+
+
+def solveNQUtil(board,col):
+    if col>=N:
         return True
     for i in range(N):
-        if ((ld[i - col + N - 1] != 1 and
-             rd[i + col] != 1) and cl[i] != 1):
-                  
-            board[i][col] = 1
-            ld[i - col + N - 1] = rd[i + col] = cl[i] = 1
-            if (solveNQUtil(board, col + 1)):
+        if IsSafe(board,i,col):
+            board[i][col]=1
+            if solveNQUtil(board, col + 1) == True:
                 return True
-            board[i][col] = 0 # BACKTRACK
-            ld[i - col + N - 1] = rd[i + col] = cl[i] = 0
+        board[i][col] = 0
     return False
 
+
 def solveNQ():
-    board = [[0, 0, 0, 0],
-             [0, 0, 0, 0],
-             [0, 0, 0, 0],
-             [0, 0, 0, 0]]
-    if (solveNQUtil(board, 0) == False):
-        print("Solution does not exist")
+    board = [ [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0],
+              [0, 0, 0, 0] ]
+ 
+    if solveNQUtil(board, 0) == False:
+        print ("Solution does not exist")
         return False
+ 
     printSolution(board)
     return True
+
 
 start=time.time()
 solveNQ()

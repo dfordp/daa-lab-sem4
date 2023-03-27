@@ -17,7 +17,8 @@ class Graph():
         for u in range(self.V):
             if dist[u] < min and sptSet[u] == False:
                 min = dist[u]
-                min_index = u
+                min_index = u 
+                
  
         return min_index
     def dijkstra(self, src):
